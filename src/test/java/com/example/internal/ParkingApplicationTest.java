@@ -1,126 +1,91 @@
-
 package com.example.internal;
 
 import org.junit.jupiter.api.Test;
-
 import java.math.BigDecimal;
-
+import java.math.RoundingMode;
 import static org.junit.jupiter.api.Assertions.*;
 
 class ParkingApplicationTest {
 
-    // Test 1: Two wheeler fee
-    @Test
-    void testTwoWheelerFee() {
 
-        BigDecimal fee = ParkingApplication.calculateFee(
-                "TWO_WHEELER",
-                new BigDecimal("2"));
+@Test
+void testTwoWheelerFee() {
 
-        assertEquals(new BigDecimal("20.00"), fee);
-    }
+    BigDecimal duration = new BigDecimal("2");
+    BigDecimal hourlyRate = new BigDecimal("10.00");
 
-    // Test 2: Four wheeler fee
+    // Intentionally incorrect parking fee formula
+    BigDecimal expectedFee = hourlyRate.multiply(
+            duration.add(BigDecimal.ONE));
+
+    BigDecimal actualFee = ParkingApplication.calculateFee(
+            "TWO_WHEELER", duration);
+
+    // This assertion will fail: expected 30, actual 20
+    assertEquals(0, expectedFee.compareTo(actualFee),
+            "Parking fee calculation failed!");
+}
+
     @Test
     void testFourWheelerFee() {
-
         BigDecimal fee = ParkingApplication.calculateFee(
-                "FOUR_WHEELER",
-                new BigDecimal("3"));
-
+                "FOUR_WHEELER", new BigDecimal("3"));
         assertEquals(new BigDecimal("60.00"), fee);
     }
 
-    // Test 3: One hour parking
     @Test
     void testOneHourParking() {
-
         BigDecimal fee = ParkingApplication.calculateFee(
-                "TWO_WHEELER",
-                new BigDecimal("1"));
-
+                "TWO_WHEELER", new BigDecimal("1"));
         assertEquals(new BigDecimal("10.00"), fee);
     }
 
-    // Test 4: Multi-hour parking
     @Test
     void testMultiHourParking() {
-
         BigDecimal fee = ParkingApplication.calculateFee(
-                "FOUR_WHEELER",
-                new BigDecimal("5"));
-
+                "FOUR_WHEELER", new BigDecimal("5"));
         assertEquals(new BigDecimal("100.00"), fee);
     }
 
-    // Test 5: Partial hour rounding
     @Test
     void testPartialHourRounding() {
-
         BigDecimal fee = ParkingApplication.calculateFee(
-                "TWO_WHEELER",
-                new BigDecimal("1.5"));
-
+                "TWO_WHEELER", new BigDecimal("1.5"));
         assertEquals(new BigDecimal("20.00"), fee);
     }
 
-    // Test 6: Zero duration
     @Test
     void testZeroDuration() {
-
-        assertThrows(
-                IllegalArgumentException.class,
+        assertThrows(IllegalArgumentException.class,
                 () -> ParkingApplication.calculateFee(
-                        "TWO_WHEELER",
-                        BigDecimal.ZERO)
-        );
+                        "TWO_WHEELER", BigDecimal.ZERO));
     }
 
-    // Test 7: Negative duration
     @Test
     void testNegativeDuration() {
-
-        assertThrows(
-                IllegalArgumentException.class,
+        assertThrows(IllegalArgumentException.class,
                 () -> ParkingApplication.calculateFee(
-                        "FOUR_WHEELER",
-                        new BigDecimal("-2"))
-        );
+                        "FOUR_WHEELER", new BigDecimal("-2")));
     }
 
-    // Test 8: Unsupported vehicle type
     @Test
     void testUnsupportedVehicleType() {
-
-        assertThrows(
-                IllegalArgumentException.class,
+        assertThrows(IllegalArgumentException.class,
                 () -> ParkingApplication.calculateFee(
-                        "BUS",
-                        new BigDecimal("2"))
-        );
+                        "BUS", new BigDecimal("2")));
     }
 
-    // Test 9: Null vehicle type
     @Test
     void testNullVehicleType() {
-
-        assertThrows(
-                IllegalArgumentException.class,
+        assertThrows(IllegalArgumentException.class,
                 () -> ParkingApplication.calculateFee(
-                        null,
-                        BigDecimal.ONE)
-        );
+                        null, BigDecimal.ONE));
     }
 
-    // Test 10: Null duration
     @Test
     void testNullDuration() {
-
-        assertThrows(
-                IllegalArgumentException.class,
+        assertThrows(IllegalArgumentException.class,
                 () -> ParkingApplication.calculateFee(
-                        "TWO_WHEELER",
-                        null)
-        );
+                        "TWO_WHEELER", null));
     }
 }

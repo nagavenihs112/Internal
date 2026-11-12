@@ -18,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout GitHub repository
+      # Step 1: Checkout repository
       - name: Checkout Repository
         uses: actions/checkout@v4
 
@@ -30,7 +30,7 @@ jobs:
           java-version: '17'
           cache: maven
 
-      # Step 3: Build Maven project and run JUnit tests
+      # Step 3: Build and run JUnit tests
       - name: Build and Run JUnit Tests
         run: mvn --batch-mode clean verify
 
